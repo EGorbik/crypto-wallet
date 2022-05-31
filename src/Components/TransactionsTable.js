@@ -22,12 +22,13 @@ const TransactionsTable = ({ transactions, address }) => {
 
     useEffect(() => {
         let newRows = transactions.map(tr => {
-            console.log(tr.value)
-            console.log(tr.value/1000000000)
+            console.log(tr.from)
+            console.log(address)
+            console.log(tr.from === address)
             let hash = tr.hash;
             let nonce = tr.nonce;
             let value = +tr.value/1000000000000000000;
-            let type = tr.from === address ? 'send' : 'receive';
+            let type = tr.from.toLowerCase() === address.toLowerCase() ? 'send' : 'receive';
             return createData(hash, nonce, value, type)
         })
         setRows(newRows);

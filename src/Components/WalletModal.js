@@ -27,15 +27,14 @@ const WalletModal = ({ open, handleClose }) => {
 
     function generateMnemonic() {
         const entropy = ethers.utils.randomBytes(16);
-        console.log(entropy)
         const mnemonic = ethers.utils.entropyToMnemonic(entropy);
         let hash = ethers.utils.mnemonicToEntropy(mnemonic);
-        console.log(hash)
+        console.log(mnemonic)
         return mnemonic;
     }
 
     const handleCreate = () => {
-        handleClose()
+        handleClose();
         const mnemonic = generateMnemonic()
         let {address, privateKey} = ethers.Wallet.fromMnemonic(mnemonic);
         dispatch({ 'type': 'ADD_WALLET', payload: {id: uuidv4(), name, address, privateKey} })
@@ -44,9 +43,8 @@ const WalletModal = ({ open, handleClose }) => {
 
     const handleImport = async () => {
         handleClose()
-        const hash = await ethers.utils.mnemonicToEntropy(phrase);
         const walletMnemonic = await ethers.Wallet.fromMnemonic(phrase);
-        dispatch({ 'type': 'ADD_WALLET', payload: {id: uuidv4(), name: 'test', address: walletMnemonic.address, privateKey: walletMnemonic.privateKey} })
+        dispatch({ 'type': 'ADD_WALLET', payload: {id: uuidv4(), name: name, address: walletMnemonic.address, privateKey: walletMnemonic.privateKey} })
         setName('');
         setPhrase('');
     }

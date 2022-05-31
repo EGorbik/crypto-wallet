@@ -50,21 +50,22 @@ const Wallet = () => {
         }
     }
 
-        async function getHistory() {
-            try {
-                let res = await axios({
-                    method: 'get',
-                    url: `${getHost()}/api?module=account&action=txlist&address=${state?.wallet?.address}&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=7CDDNAVFY9QMCJARAJ58RHDM57J4IYGMIA`
-                });
-                let data = res.data;
-                console.log(data)
-                setTransactions(data.result)
-                return data;
-            } catch (error) {
-                console.log(error.response);
-                return error.response;
-            }
+    async function getHistory() {
+        console.log(process.env.REACT_APP_ETHERSCAN_API_KEY)
+        try {
+            let res = await axios({
+                method: 'get',
+                url: `${getHost()}/api?module=account&action=txlist&address=${state?.wallet?.address}&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
+            });
+            let data = res.data;
+            console.log(data)
+            setTransactions(data.result)
+            return data;
+        } catch (error) {
+            console.log(error.response);
+            return error.response;
         }
+    }
 
     const abi = [
         "function balanceOf(address owner) view returns (uint256)",
@@ -74,28 +75,27 @@ const Wallet = () => {
         "event Transfer(address indexed from, address indexed to, uint amount)",
     ];
 
-        const sendTransaction = async () => {
-            let tx;
-            let provider = ethers.getDefaultProvider(network);
-            let wallet = new ethers.Wallet(state?.wallet?.privateKey, provider);
-            //let erc20 = new ethers.Contract(state?.wallet?.address, abi, wallet);
-            let coinOptions = {
-                to: receiverAddress,
-                gasLimit: gasLimit,
-                gasPrice: ethers.utils.parseUnits('4', 'gwei'),
-                value: ethers.utils.parseEther(value),
-                nonce: 211
-            };
-            try {
-                tx = await wallet.sendTransaction(coinOptions);
-                console.log('success transaction')
-            } catch (e) {
-                console.log("error from transfer");
-                console.log(e);
-            }
-
+    const sendTransaction = async () => {
+        let tx;
+        let provider = ethers.getDefaultProvider(network);
+        let wallet = new ethers.Wallet(state?.wallet?.privateKey, provider);
+        //let erc20 = new ethers.Contract(state?.wallet?.address, abi, wallet);
+        let coinOptions = {
+            to: receiverAddress,
+            gasLimit: gasLimit,
+            gasPrice: ethers.utils.parseUnits('4', 'gwei'),
+            value: ethers.utils.parseEther(value),
+            nonce: 213
+        };
+        try {
+            tx = await wallet.sendTransaction(coinOptions);
+            console.log('success transaction')
             console.log(tx);
+        } catch (e) {
+            console.log("error from transfer");
+            console.log(e);
         }
+    }
 
     return (
         <Container maxWidth={'false'}>

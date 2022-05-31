@@ -22,25 +22,12 @@ import {useNavigate} from "react-router";
 import {withWallet} from "../Context/WalletsContext/withWallet";
 import {WalletContext} from "../Context/WalletsContext/wallet-context";
 
-function generate(element) {
-    return [0, 1, 2].map((value) =>
-        React.cloneElement(element, {
-            key: value,
-        }),
-    );
-}
-
 export const Wallets = () => {
     const [ isWalletModal, setIsWalletModal ] = useState(false);
     const [dense, setDense] = React.useState(false);
     const [secondary, setSecondary] = React.useState(false);
     let navigate = useNavigate();
     let { state, dispatch } = useContext(WalletContext);
-
-    useEffect(() => {
-        //dispatch({ type: "ADD_WALLET", payload: { id: 1, name: 'Egor' } })
-    }, [])
-
 
     return (
         <div>
