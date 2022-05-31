@@ -21,6 +21,27 @@ const Wallet = () => {
     const [ gasLimit, setGasLimit ] = useState('');
     const [ value, setValue ] = useState('');
 
+
+    const getTokenValue = async () => {
+        let value;
+        let defProvider = ethers.getDefaultProvider('kovan');
+
+        let contract = new ethers.Contract(
+            '0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa',
+            abi,
+            defProvider
+        );
+
+        try {
+            value = await contract.balanceOf('0x5D0d87D5442F99B203E56c87314C5E61E9789Dc6');
+            console.log(value)
+            console.log(ethers.utils.formatEther(value))
+        } catch (e) {
+            console.log('error to get balance token')
+            console.log(e)
+        }
+    }
+
     const getBalance = async () => {
         setBalanceLoader(true);
         let defProvider = await ethers.getDefaultProvider(network);
@@ -33,6 +54,7 @@ const Wallet = () => {
 
     useEffect(() => {
         getBalance();
+        getTokenValue();
     }, [])
 
     useEffect(() => {
